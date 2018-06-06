@@ -1,0 +1,270 @@
+.to_change, .facility_name, .adress, .place, .phone_1, .phone_2,  .ef-edit {
+    display: inline-block;
+}
+
+
+.ef-wrap {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.ef-info-images {
+    display: flex;
+    width: 30%;
+    flex-direction: column;
+    border-right: $crna2;
+    
+}
+
+//dugme izmjeni
+.ef-edit {
+    border: $plava;
+    color: red;
+    padding: 1%;
+    margin-left: 10%;
+   
+}
+
+.ef-info{
+
+
+    display: flex;
+    flex-direction: column;
+//    align-items: stretch;
+//    border: $crvena;
+     height: 50vh;
+}
+
+
+.ef-change{
+    margin: 1%;
+    padding: 1%;
+    border-bottom: $plava;
+    & div:nth-of-type(1) {
+        
+        width: 30%;
+        
+        & p {
+            
+            width: 100%;
+        }
+    }
+}
+
+
+
+.to_change {
+	width: 30%;
+//    border: $plava;
+}
+
+
+
+
+
+
+
+
+
+
+
+//---------DIO SA SLIKAMA----------
+
+.ef-images{
+    padding: 1%;
+
+    
+    border-top: $crna2;
+    
+
+}
+
+.ef-all_images {
+    
+	
+display: flex;
+    flex-wrap: wrap;
+}
+
+.ef-image {
+    margin: 0.5%;
+    width: 19%;
+    display: inline-block;
+    
+    & img {
+        width: 100%;
+    }
+}
+
+
+
+//-----DIO SA IZLISTANIM SOBAMA--------------
+
+.ef-rooms {
+    display: flex;
+    flex-direction: column;
+    width: 68%;
+}
+
+.ef-room {
+//    height: 20%;
+    border: $zelena;
+    display: flex;
+    padding: 3%;
+    
+    & .ef-room-info, .ef-room-description, .ef-room-delete {
+//        border: $crvena2;
+//        width: 20%;
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        margin: 3%;
+    }
+    
+    & .ef-room-profile {
+        border: $zelena2;
+        width: 20%;
+        text-align: center;
+        flex-grow: 2;
+    }
+    
+    &>div>img {
+        width: 100%; 
+    }
+}
+
+
+
+
+
+
+
+
+//-----SLIKA OBJEKTA KOJA SE OTVARA KLIKOM
+
+.ef_big_img_wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid red;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    display: none;
+    
+    &>div:not(.ef_close) {
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        border: $plava;
+    }
+    
+   
+}
+
+.ef_big_img {
+    width: 70%;
+    border: $zelena;
+    
+    & img {
+        width: 100%;
+    }
+}
+
+
+.ef_big_info{
+    width: calc(30% - 10px);
+    border: $zelena2;
+}
+
+
+.ef_close {
+    position: fixed;
+    top:0;
+    right: 0%;
+    
+    border: $crna;
+    background-color: black;
+    color: white;
+    font-size: 1.5em;
+    padding: 10px;
+    width: 5%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------описи, stranica edit_descriptions------
+.ef-descriptions {
+	display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+
+    .ef-description {
+        padding: 3% 2%;
+        border: $plava;
+        
+        width: 50%;
+        display: inline-block;
+//        position: relative;
+       
+        
+        &>div:nth-of-type(1) {
+            height: 80%;
+             overflow-y: scroll;
+//            border: $zelena;
+        }
+    }
+
+
+
+.ef-edit-text {
+//    position: absolute;
+//    bottom: 10%;
+//    right: 5%;
+    margin-right: 10%;
+    margin-top: 8%;
+	border: $plava;
+//    float: right;
+    padding: 2% 4%;
+    text-align: center;
+    
+}
+
+
+.input_field-text {
+    overflow-y: visible;
+    width: 100%;
+    padding: 1%;
+    height: 80vh;
+    
+}
+
+.ef-submit-text {
+    float: right;
+    margin-top: 5%;
+    margin-right: 25%;
+    padding: 3% 5%;
+}

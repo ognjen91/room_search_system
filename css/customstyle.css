@@ -1,0 +1,342 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+.addFacility {
+  float: right; }
+
+.fac-name {
+  text-align: center; }
+
+.facility_listed {
+  border: 1px solid black;
+  display: inline-block;
+  width: calc(100% * (1/3) - 3%);
+  margin-right: 2%;
+  margin-bottom: 3%; }
+  .facility_listed a {
+    text-decoration: none;
+    color: black; }
+  .facility_listed img {
+    width: 100%; }
+
+.new_image_add {
+  margin-bottom: 50px;
+  border: 2px dashed red; }
+
+.new_img_btn {
+  border: 2px solid blue;
+  padding: 1% 3%;
+  width: 150px; }
+
+.new_img_btn_done {
+  border: 2px solid red;
+  padding: 1% 3%;
+  width: 150px; }
+
+.to_change, .facility_name, .adress, .place, .phone_1, .phone_2, .ef-edit {
+  display: inline-block; }
+
+.ef-wrap {
+  display: flex;
+  flex-direction: row; }
+
+.ef-info-images {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  border-right: 2px solid black; }
+
+.ef-edit {
+  border: 1px solid blue;
+  color: red;
+  padding: 1%;
+  margin-left: 10%; }
+
+.ef-info {
+  display: flex;
+  flex-direction: column;
+  height: 50vh; }
+
+.ef-change {
+  margin: 1%;
+  padding: 1%;
+  border-bottom: 1px solid blue; }
+  .ef-change div:nth-of-type(1) {
+    width: 30%; }
+    .ef-change div:nth-of-type(1) p {
+      width: 100%; }
+
+.to_change {
+  width: 30%; }
+
+.ef-images {
+  padding: 1%;
+  border-top: 2px solid black; }
+
+.ef-all_images {
+  display: flex;
+  flex-wrap: wrap; }
+
+.ef-image {
+  margin: 0.5%;
+  width: 19%;
+  display: inline-block; }
+  .ef-image img {
+    width: 100%; }
+
+.ef-rooms {
+  display: flex;
+  flex-direction: column;
+  width: 68%; }
+
+.ef-room {
+  border: 1px solid green;
+  display: flex;
+  padding: 3%; }
+  .ef-room .ef-room-info, .ef-room .ef-room-description, .ef-room .ef-room-delete {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin: 3%; }
+  .ef-room .ef-room-profile {
+    border: 2px solid green;
+    width: 20%;
+    text-align: center;
+    flex-grow: 2; }
+  .ef-room > div > img {
+    width: 100%; }
+
+.ef_big_img_wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid red;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: none; }
+  .ef_big_img_wrap > div:not(.ef_close) {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid blue; }
+
+.ef_big_img {
+  width: 70%;
+  border: 1px solid green; }
+  .ef_big_img img {
+    width: 100%; }
+
+.ef_big_info {
+  width: calc(30% - 10px);
+  border: 2px solid green; }
+
+.ef_close {
+  position: fixed;
+  top: 0;
+  right: 0%;
+  border: 1px solid black;
+  background-color: black;
+  color: white;
+  font-size: 1.5em;
+  padding: 10px;
+  width: 5%; }
+
+.ef-descriptions {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; }
+
+.ef-description {
+  padding: 3% 2%;
+  border: 1px solid blue;
+  width: 50%;
+  display: inline-block; }
+  .ef-description > div:nth-of-type(1) {
+    height: 80%;
+    overflow-y: scroll; }
+
+.ef-edit-text {
+  margin-right: 10%;
+  margin-top: 8%;
+  border: 1px solid blue;
+  padding: 2% 4%;
+  text-align: center; }
+
+.input_field-text {
+  overflow-y: visible;
+  width: 100%;
+  padding: 1%;
+  height: 80vh; }
+
+.ef-submit-text {
+  float: right;
+  margin-top: 5%;
+  margin-right: 25%;
+  padding: 3% 5%; }
+
+.er_wrap {
+  display: flex; }
+
+.er_edit_data {
+  width: 50%;
+  border: 1px solid blue; }
+
+.er_images {
+  width: 50%;
+  border: 1px solid red;
+  padding: 2%;
+  display: flex;
+  flex-direction: column; }
+
+.er_labels > div {
+  display: inline-block;
+  border: 1px solid black; }
+
+.er_img_lbl {
+  width: 40%;
+  border: 1px solid black; }
+
+.er_created_lbl {
+  width: 20%; }
+
+.er_del_lbl {
+  width: 35%; }
+
+.er_image_all {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3%;
+  border: 2px solid green; }
+
+.er_img {
+  border: 2px solid blue;
+  width: 40%; }
+  .er_img img {
+    width: 100%; }
+
+.er_img_info {
+  width: 20%;
+  border: 1px solid yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.er_img_del {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.er_go_del {
+  text-decoration: underline;
+  cursor: pointer; }
+
+.admin_calendars_wrap {
+  width: 100vw;
+  display: flex;
+  flex-direction: column; }
+
+.ac_year {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid red; }
+
+.ac_display_year h1 {
+  margin: 5%;
+  text-align: center; }
+
+.ac_calendars_for_year {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid green; }
+
+.ac_wrap {
+  width: 20%;
+  margin: 1%;
+  border: 1px solid black; }
+
+.ec_calendar {
+  width: 80%; }
+
+.calendar {
+  display: flex;
+  flex-wrap: wrap; }
+  .calendar > div {
+    width: calc(100% / 7 - 5px);
+    border: 1px solid black;
+    padding: 2%; }
+
+.ava_date {
+  background-color: #1ccb1c;
+  color: white; }
+
+.unava_date {
+  background-color: #e03019;
+  color: white; }
+
+.calendar_blanc_wrap {
+  display: flex;
+  flex-direction: column; }
+
+.cal_blanc_date {
+  background-color: antiquewhite; }
+
+.doc_wrapper {
+  width: 100vw; }
+
+.fp_results {
+  width: 60%;
+  border: 2px solid red; }
+
+.search_results {
+  display: flex;
+  flex-direction: column; }
+
+.room_found {
+  padding: 3%;
+  border: 2px solid black;
+  margin-bottom: 2%;
+  display: flex; }
+  .room_found > div {
+    margin-right: 4%; }
+
+.fp_room_profile {
+  width: 20%; }
+  .fp_room_profile img {
+    width: 100%; }
+
+.fp_basic_info {
+  width: 25%; }
+
+.fp_calendar {
+  width: 49%;
+  display: inline-block;
+  border: 3px solid black;
+  overflow: hidden; }
+
+.calendar_choice {
+  border: 1px solid black;
+  padding: 3% 5%; }
+  .calendar_choice > select {
+    margin-right: 5%;
+    border: 1px solid red;
+    width: 40%;
+    height: 40px;
+    font-size: 15px; }
+
+.fp_calendars_wrap {
+  border: 4px solid red; }
+
+.calendar_blanc_wrap {
+  display: inline-block;
+  border: 1px solid yellow; }
+
+/*# sourceMappingURL=customstyle.css.map */

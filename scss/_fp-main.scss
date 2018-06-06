@@ -1,0 +1,47 @@
+.doc_wrapper {
+    width: 100vw;
+}
+
+
+.fp_results { 
+
+    width: 60%;
+    border: $crvena2;
+   
+
+}
+
+.search_results {
+    display: flex;
+    flex-direction: column;
+}
+
+.room_found {
+    
+    padding: 3%;
+    border: $crna2;
+    margin-bottom: 2%;
+    
+    display: flex;
+    
+    &>div {
+        margin-right: 4%;
+    }
+    
+}
+
+
+.fp_room_profile {
+    width: 20%;
+    
+    & img {
+        width: 100%;
+    }
+    
+}
+
+
+.fp_basic_info {
+    
+    width: 25%;
+}

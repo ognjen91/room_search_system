@@ -1,0 +1,33 @@
+.addFacility {
+    float : right;
+}
+
+.facilities_listed {
+   
+    
+    
+}
+
+.fac-name {
+    text-align: center;
+}
+
+.facility_listed {
+    border: $crna;
+   display: inline-block;
+     width: calc(100% * (1/3) - 3%);
+   
+     margin-right: 2%;
+    margin-bottom: 3%;
+    
+    
+    & a {
+        text-decoration: none;
+        color: black;
+    }
+    
+    
+    & img {
+        width: 100%;
+    }  
+}

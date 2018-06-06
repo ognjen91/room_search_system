@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@import "vars";
+@import "admin-header";
+@import "admin-home";
+@import "admin-addfacility";
+@import "admin-addimage";
+@import "admin-editfacility";
+@import "admin-addnewroom";
+@import "admin-editroom";
+@import "admin-calendars";
+@import "admin-editcalendar";
+
+
+
+@import "calendars";
+
+//--------front page---------
+
+@import "fp-main";
+@import "fp-calendarsection";

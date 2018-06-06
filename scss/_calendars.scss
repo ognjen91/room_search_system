@@ -1,0 +1,46 @@
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+    
+    &>div {
+        width: calc(100% / 7 - 5px);
+        border: $crna;
+        padding: 2%;
+        
+        
+    }
+}
+
+.ava_date {
+    background-color: #1ccb1c;
+    color: white;
+}
+
+.unava_date {
+    background-color: rgb(224, 48, 25);
+    color: white;
+}
+
+
+
+
+
+
+//---cist kalendar------------
+
+
+.calendar_blanc_wrap {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.calendar_blanc {
+    
+}
+
+
+.cal_blanc_date {
+    background-color: antiquewhite;
+}
+

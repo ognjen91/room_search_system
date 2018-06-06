@@ -1,0 +1,46 @@
+
+
+
+
+.fp_calendar {
+    width: 49%;
+    display: inline-block;
+    border: 3px solid black;
+//     height: 50vh; //uparuje se sa visinom .in_calendars_wrap-a
+    overflow: hidden;
+}
+
+.calendar_choice {
+    border: $crna;
+    padding: 3% 5%;
+    
+    &>select {
+        margin-right: 5%;
+        border: $crvena;
+        width: 40%;
+        height: 40px;
+        font-size: 15px
+    }
+}
+
+
+
+
+.fp_calendars_wrap {
+    border: 4px solid red;
+//    display: inline;
+    
+   
+}
+
+.fp_calendars_holder {
+
+}
+
+.calendar_blanc_wrap {
+	display: inline-block;
+//    width: 20%;
+//    float: left;
+    border: $zuta;
+   
+}

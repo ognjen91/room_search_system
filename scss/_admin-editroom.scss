@@ -1,0 +1,90 @@
+.er_wrap {
+    display: flex;
+}
+
+.er_edit_data {
+    width: 50%;
+    border: $plava;
+}
+
+
+
+
+.er_images {
+    width: 50%;
+    border: $crvena;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.er_labels {
+    
+     
+      &>div {
+        display: inline-block;
+          border: $crna;
+    }
+    
+}
+
+.er_img_lbl {
+    width: 40%;
+    border: $crna;
+}
+
+.er_created_lbl {
+    width: 20%;
+}
+
+.er_del_lbl {
+    width: 35%;
+}
+
+.er_image_all {
+    
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3%;
+    border: $zelena2;
+    
+  
+}
+
+
+
+.er_img {
+    
+    
+    
+    border: $plava2;
+    width: 40%;
+    
+   
+    
+    & img {
+        width: 100%;
+    }
+}
+
+
+.er_img_info{
+    width: 20%;
+    border: $zuta;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.er_img_del {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.er_go_del {
+    text-decoration: underline;
+    cursor: pointer;
+}

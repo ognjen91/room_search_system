@@ -1,0 +1,37 @@
+.admin_calendars_wrap {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.ac_year {
+     display: flex;
+     flex-direction: column;
+     
+    border: $crvena;
+}
+
+.ac_display_year {
+    
+    
+    & h1 {
+        margin: 5%;
+        text-align: center;
+    }
+}
+
+.ac_calendars_for_year {
+    display: flex;
+     flex-direction: row;
+    flex-wrap: wrap;
+    border: $zelena;
+}
+
+
+.ac_wrap {
+    width: 20%;
+    margin: 1%;
+    border: $crna;
+   
+}
