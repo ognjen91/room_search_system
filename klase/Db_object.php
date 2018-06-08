@@ -1,11 +1,26 @@
 <?php
 
+/*
+-get_queries_object_array: za uneseni select query, vraca array sa objektima
+-instantiation :pomocna za get_queries_object_array, vraca objekat napravljen od dijela resuts set-a
+-object_has_property - provjerava da li objekt ima property
 
+FIND METODE: 
+- razne kombinacije (cijeli query, samo uslov; svi rezultati, jedan rezultat)... vraca se objekat ili array objekata
+
+
+-if_already_exists: staticna metoda za provjeru da li unos vec postoji u bazi
+-array_vars_to_obj_props: za proizvoljan niz provjerava da li su keyevi propsi objekta i ako jesu,  dodjeljuje vrijednosti ualue-a propsima objekta.
+-object_props : vraca array sa vrijendostima db_table_fields, tj vrijednostima object propsa koji su u nizu db_table_fields
+
+
+*/
 class Db_object extends Sql{
     
     
+//    ========RETURN OBJECTS ARRAY===========
     //kod select query-a, vraca array sa objektima
-    public static function get_queries_object_array($query){
+    public static function get_queries_object_array(string $query){
         $result_set = static::query_to_db($query);
         $result_array = array();
         while ($row = mysqli_fetch_assoc($result_set)){
@@ -17,7 +32,7 @@ class Db_object extends Sql{
         
     }
     
-
+        //pomocna za get_queries_object_array
       //vraca objekat napravljen od dijela resuts set-a
     protected static function instantiation($the_record){
         
@@ -36,6 +51,7 @@ class Db_object extends Sql{
         
     }
     
+    //pomocna za get_queries_object_array
     //provjerava da li objekat sadrzi property
     protected static function object_has_property($object, $property){
        $properties_of_current_object = get_object_vars($object);
@@ -44,8 +60,10 @@ class Db_object extends Sql{
     }
     
 
+//===============================    
+//    ========FIND METODE==================    
+ //===============================   
     
-//    -------DRUGE FJE--------
     //FIND FUNKCIJA ZA VISE REZULTATA
     //vraca array sa objektima koji zadovoljavaju uslove 
       protected static function find_all_no_cond(){
@@ -78,7 +96,7 @@ class Db_object extends Sql{
     
     //FIND FUNKCIJA ZA JEDAN REZULTAT
     //vraca objekat
-     protected static function find_specific($conditionString){
+     protected static function find_specific(string $conditionString){
           $query = "SELECT * FROM " . static::$db_table;
           $query .= " WHERE " . $conditionString;
           $resultArray = static:: get_queries_object_array($query);
@@ -94,11 +112,15 @@ class Db_object extends Sql{
           return array_shift($resultArray);
       }
     
+//     ==============kraj find metoda===============
+    
+    
+//    ===================DRUGE METODE=========================
     
     //PROVJERA DA LI SE UNOS NALAZI U BAZI
     //staticna metoda za provjeru da li unos vec postoji u bazi
     //ulazna vrijednost je uslov, npr "user='Neko'";
-    protected static function if_already_exists($db_table, $conditionString){
+    protected static function if_already_exists(string $db_table, string $conditionString){
         $query = "SELECT * FROM " . $db_table . " WHERE " . $conditionString; 
         $result = (new self)->get_queries_object_array($query);
         return !empty($result);
@@ -132,11 +154,14 @@ class Db_object extends Sql{
     }
     
     
-    
+     public function public_object_props(){
+         $properties = $this->object_props();
+         return $properties;
+     }
     
     
 
-    
+ //====class end====  
 }
 
 

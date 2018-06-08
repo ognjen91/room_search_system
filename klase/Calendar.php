@@ -1,16 +1,41 @@
 <?php
 
 
-//metode:
-//-koja vraca niz objekata zauzetih dana u mjesecu (unav_days_to_dates)
-//-vraca t/f mogucnost rezervacije (is_reservtion_possible)
-//lista mjesece u kojim je aranzman (months_between)
-//provjerava koji datum je kasnii (is_date_greater)
-//vraca array sa svim objektima svih zauzetih datuma za sobu (all_unavailable_dates)
-//za broj dana u mjesecu (no_of_days_in_month)
-//vraca broj mjeseca (month_str_to_int)
-//vraca broj praznih dana na pocetku mjseca (empty_days)
-//stampanje cistog kalendar (print_blanc_calendar)
+/*
+ZAUZETI DANI:
+row_to_days : za uneseni mjesec i godinu, vraca array sa stringovima zauzetih dana u mjesecu
+unav_days_to_dates :  vraca niz objekata zauzetih dana u mjesecu
+
+MOGUCNOST   ARANZMANA:
+is_reservtion_possible : vraca t/f mogucnost rezervacije 
+
+SVI ZAUZETI DATUMI ZA SOBU:
+all_unavailable_dates : vraca array sa svim objektima svih zauzetih datuma za sobu 
+
+STAMPA KALENDARA: 
+print_blanc_calendar : stampanje cistog kalendar 
+
+
+UPDATE KALENDARA (DOSTUPNOSTI)
+availability_submit
+
+POMOCNE METODE:
+months_between : lista mjesece u kojim je aranzman 
+is_date_greater : provjerava koji datum je kasnii 
+no_of_days_in_month : vraca broj dana u mjesecu 
+month_str_to_int : vraca broj mjeseca 
+empty_days : vraca broj praznih dana na pocetku mjseca 
+correct_month_name : pravilni nazivi mjeseci za frontend
+
+
+METODE ZA PODATKE KALENDARA:
+get_calendar_data
+get_calendar_data_spec
+
+GETTER METODE
+active_month, active_year
+
+*/
 
 class Calendar extends Db_object {
 private $room_name;
@@ -49,11 +74,12 @@ protected function row_to_days(string $month, int $year, Room $room_for_check){
     $this->get_calendar_data();
     
     $query = "SELECT * FROM " . static::$db_table . " WHERE ";
-    $query .= "facility_name='". $room_for_check->facility_name. "' AND room_name='". $room_for_check->name. "' AND owner='" . $room_for_check->owner."'";
+    $query .= "facility_name='". $room_for_check->get_facility(). "' AND room_name='". $room_for_check->get_room_name(). "' AND owner='" . $room_for_check->get_owner()."'";
     $query .= " AND year='". $year."'";
-
+//    var_dump($query);
     //rezultat queya je objekat sa svim mjesecima
     $result_object = self::find_specific_full_query($query);
+//    var_dump($result_object);
     if (!$result_object){
         return;
     }
@@ -98,7 +124,9 @@ protected  function unav_days_to_dates(string $month, int $year, Room $room_for_
    return $unav_dates_in_month;
 }
 
-                      
+      
+    
+    
        
 //    ================================================================================MOGUCNOST   ARANZMANA=============================================================================
    //provjerava da li izmedju 2 dana ima zauzetih dana --->da li je moguc aranzman
@@ -117,7 +145,39 @@ protected function is_reservtion_possible(DateTime $date1, DateTime  $date2, Roo
 }
 
 
-//=========stampanje cistog kalendara=============
+
+      
+    
+    //    ===============SVI ZAUZETI DATUMI ZA SOBU=========
+    //    ==============metoda za izlistavanje svih zauzetih datuma. vraca array sa objektima zauzetih datuma===== 
+    protected function all_unavailable_dates($room_for_check){
+       $all_unavailable_dates = array();
+        
+        foreach (self::$db_table_months as $month){
+            foreach (self::$db_table_years as $year){
+              $unav_dates = $this->unav_days_to_dates($month, $year, $room_for_check);
+//                var_dump($unav_dates);
+                if (!$unav_dates) continue; //otarasim se onih koji su null
+//                var_dump($unav_dates);
+                foreach ($unav_dates as $unav_date){  
+                  if (is_bool($unav_date)) continue;
+                $all_unavailable_dates[] = $unav_date;
+         }
+        }
+          
+    }
+        return  $all_unavailable_dates;
+    }
+    
+    
+    
+    
+//    ======================================
+//        =========STAMPANJE KALENDARA==========
+//        ======================
+   
+    
+    //STAMPA CISTOG KALENDARA
 public function print_blanc_calendar(string $month, int $year){
        
                $month_days = static::no_of_days_in_month($month, $year); 
@@ -133,17 +193,55 @@ public function print_blanc_calendar(string $month, int $year){
                    echo "</div>";
                }
            }
-      
 
+    
+//    =================================================
+//    ============================UPDATE KALENDARA (DOSTUPNOSTI)===================
+//    =================================================
+    public function availability_submit($room){
+       
+  $update_query = "UPDATE " . self::$db_table . " SET " . $this->active_month() . "='";
+       
+//       echo "MJESEC: "; var_dump($month);
+       
+      $days_in_month = $this->no_of_days_in_month($this->active_month(), $this->active_year());     
+      for ($i=1; $i<=$days_in_month ; $i++){
+          $availability = $_POST['availability'][$i-1]; //jer pocinje od 0
+          $availability = boolval($availability); 
+//          var_dump($availability);
+          if (!$availability){
+          $query_content = "$i,";
+          
+//                    echo  $query_content;
+          $update_query .= $query_content;
+          }
+      }
+       $update_query .= "'
+       WHERE room_name = '" . $room->name . "'";
+       $update_query .= " AND facility_name = '" . $room->facility_name . "'";
+       $update_query .= " AND owner = '" . $room->get_owner() . "'";
+       $update_query .= " AND year = '" . $this->active_year() . "'";
+//       echo $update_query . "<br>";
+       
+       return $this->update_query_to_db($update_query);
+ 
+   }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 //    =====================================
 //    ============POMOCNE METODE==============
 //    ====================================
         
 
-
-
-
-    //==============MJESECI IZMEDJU DVA DATUMA============
+ //==============MJESECI IZMEDJU DVA DATUMA============
     //treba da vrati array u kom se nalaze mjeseci u kojim se nalazi aranzman, NE RACUNAJUCI POCETNI MJESEC
     protected static function months_between(DateTime $date1, DateTime $date2){
         
@@ -193,26 +291,7 @@ for ($i=1; $i<=$total_months_between; $i++){
     }
     
     
-//    ===============SVI ZAUZETI DATUMI ZA SOBU=========
-    //    ==============metoda za izlistavanje svih zauzetih datuma. vraca array sa objektima zauzetih datuma===== 
-    protected function all_unavailable_dates($room_for_check){
-       $all_unavailable_dates = array();
-        
-        foreach (self::$db_table_months as $month){
-            foreach (self::$db_table_years as $year){
-              $unav_dates = $this->unav_days_to_dates($month, $year, $room_for_check);
-//                var_dump($unav_dates);
-                if (!$unav_dates) continue; //otarasim se onih koji su null
-//                var_dump($unav_dates);
-                foreach ($unav_dates as $unav_date){  
-                  if (is_bool($unav_date)) continue;
-                $all_unavailable_dates[] = $unav_date;
-         }
-        }
-          
-    }
-        return  $all_unavailable_dates;
-    }
+
     
     
     
@@ -225,6 +304,7 @@ for ($i=1; $i<=$total_months_between; $i++){
         $number = cal_days_in_month(CAL_GREGORIAN, $month, $year); 
         return $number;
     }
+    
 //         =====================fje za pretvranje imena mjeseci string/int=========           
     protected static function month_str_to_int(string $month){
         $month = strtolower($month);
@@ -273,7 +353,20 @@ switch ($month) {
            return $month_int;
           }                             
           
-    //          =====================prazni dani====================
+    
+    //    ---------CORRECT NAMES OF MONTHS----------
+//    pravilni nazivi mjeseci za frontend
+    //glavni jezik sajta je srpski, drugi je engleski
+    public static function correct_month_name($month){
+       for ($i=0; $i<=count(self::$db_table_months); $i++){
+           if ($month == self::$db_table_months[$i]){
+               $correct = (isset($_GET['lang']) && $_GET['lang']=='en')? ucfirst($month) : self::$serbian_months[$i];
+               if ((isset($_GET['lang']) && $_GET['lang']=='ru')) $correct = self::$russian_months[$i];
+               return $correct;
+           }
+       }
+        
+    }
     
     //       ---------------pomocna metoda za stampanje 'praznih dana' na pocetku mjeseca------                   
         public function empty_days(string $month, int $year){
@@ -308,7 +401,16 @@ switch ($month) {
             
         }    
 
+    
+    
+    
+    
+    
+    
+    
+//    ===========================================================
 //    ============GLAVNA METODA ZA PODATKE KALENDARA============
+//    ===========================================================
          protected function get_calendar_data(){
         global $user;
         
@@ -327,9 +429,7 @@ switch ($month) {
 
  }
 
-                            
-
-          public function get_calendar_data_spec(){
+       public function get_calendar_data_spec(){
 
         if (Go_to::is_on_page("edit_calendar")){
            
@@ -346,8 +446,34 @@ switch ($month) {
           
         }
           }
+    
+    
+    
                       
-              //    ====pomocna test metoda=========
+              
+                            
+                               
+           
+    
+//    ========================GETTER METODE=========================
+public function active_month(){
+    return $this->active_month;
+}
+public function active_year(){
+    return $this->active_year;
+}
+                            
+ 
+    
+   
+             
+    
+
+    
+    
+    
+    
+    //    ====pomocna test metoda=========
     public function test(){
         global $room;
 //        $unav_dates = self::unav_days_to_dates("february", 2019, $room);
@@ -368,62 +494,6 @@ switch ($month) {
 //     $this->print_calendars   
 
     }              
-                            
-                               
-                            
-public function active_month(){
-    return $this->active_month;
-}
-public function active_year(){
-    return $this->active_year;
-}
-                            
- 
-    
-   public function availability_submit($room){
-       
-  $update_query = "UPDATE " . self::$db_table . " SET " . $this->active_month() . "='";
-       
-//       echo "MJESEC: "; var_dump($month);
-       
-      $days_in_month = $this->no_of_days_in_month($this->active_month(), $this->active_year());     
-      for ($i=1; $i<=$days_in_month ; $i++){
-          $availability = $_POST['availability'][$i-1]; //jer pocinje od 0
-          $availability = boolval($availability); 
-//          var_dump($availability);
-          if (!$availability){
-          $query_content = "$i,";
-          
-//                    echo  $query_content;
-          $update_query .= $query_content;
-          }
-      }
-       $update_query .= "'
-       WHERE room_name = '" . $room->name . "'";
-       $update_query .= " AND facility_name = '" . $room->facility_name . "'";
-       $update_query .= " AND owner = '" . $room->owner . "'";
-       $update_query .= " AND year = '" . $this->active_year() . "'";
-//       echo $update_query . "<br>";
-       
-       return $this->update_query_to_db($update_query);
- 
-   }
-             
-    
-//    ---------CORRECT NAMES OF MONTHS----------
-//    pravilni nazivi mjeseci za frontend
-    //glavni jezik sajta je srpski, drugi je engleski
-    public static function correct_month_name($month){
-       for ($i=0; $i<=count(self::$db_table_months); $i++){
-           if ($month == self::$db_table_months[$i]){
-               $correct = (isset($_GET['lang']) && $_GET['lang']=='en')? ucfirst($month) : self::$serbian_months[$i];
-               if ((isset($_GET['lang']) && $_GET['lang']=='ru')) $correct = self::$russian_months[$i];
-               return $correct;
-           }
-       }
-        
-    }
-    
                             
 //       ====class end====                       
               }  

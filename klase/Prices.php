@@ -1,9 +1,23 @@
 <?php
 
+/*
 
-//metode: all_prices : dobijam arrayeve dan_u_mj=>cijena i dan_u_mj=>popust u odgovarajucim propsima objekta
-//print_calendar: stampa kalendar sa sve podacima o cjenama i popustima u data html atributima
+CIJENA ARANZMANA IZMEDJU 2 DATUMA
+arrangement_price
+sastoji se iz 2 dijela: arrival_month_price
+                        other_months_prices
+  
+CIJENE I POPUSTI ZA DATUME
+ all_prices : vraca array elemenata dan_u_mjesecu=>cijena, a $this->$month_prices primi vrijednost arraya dan=>cijena, a $this->$month_discounts da primi vr. arraya dan=>popust
 
+STAMPANJE KALENDARA SA CIJENAMA I POPUSTIMA
+print_calendar : stampa kalendar sa sve podacima o cjenama i popustima u data html atributima
+ 
+UPDATE CIJENA I POPUSTA
+prices_submit 
+ 
+
+*/
 
 class Prices extends Calendar {
 public $january_prices;
@@ -35,7 +49,10 @@ protected static $db_table = "prices";
 private $arrival_date;
 private $departure_date;    
     
-//    ===========FJA ZA CIJENU ARANZMANA=======
+//   =================================================== 
+//    ===========CIJENA ARANZMANA=======
+//   =================================================== 
+
     //cijena se formira iz dva dijela: 
     //1. dio dolaznog mjeseca (sigurno postoji)
 //    2. dio ostalih mjeseci (ako postoje)
@@ -85,13 +102,7 @@ public function arrangement_price(DateTime $date1,DateTime $date2, Room $room_fo
   
 }    
     
-    
-    
-    private function price_for_same_year(DateTime $date1,DateTime $date2, Room $room_for_check){
-        
-    }
-    
-    
+   
     
 //    ----CIJENA U POCETNOM MJESECU-------------------
     private function arrival_month_price(DateTime $date1,DateTime $date2, Room $room_for_check){
@@ -172,16 +183,17 @@ public function arrangement_price(DateTime $date1,DateTime $date2, Room $room_fo
     
     
     
-    
-    
-//     ====CIJENE I DATUMI=============
+//    ============================================================
+//     =================CIJENE I POPUSTI ZA DATUME=================
+//    ============================================================    
+
+
 // da $this->$month_prics primi vrijednost arraya dan=>cijena, a $this->$month_discounts da primi vr. arraya dan=>popust
-         //vraca array elemenata dan_u_mjesecu=>cijena
+  //vraca array elemenata dan_u_mjesecu=>cijena
 public function all_prices(string $month, int $year, Room $room_for_check){
     $days_prices_n_disc = $this->row_to_days($month, $year, $room_for_check); //dobijam array sa vrijednostima dan:cijena=>popust
-//    var_dump($days_prices_n_disc);
 
-    $day_price_disc_array = array();
+  $day_price_disc_array = array();
     
     foreach ($days_prices_n_disc as $day_price_n_disc){
          $day_price_disc_array[] = preg_split( "/[:-]/", $day_price_n_disc);
@@ -219,8 +231,10 @@ public function all_prices(string $month, int $year, Room $room_for_check){
     
     
     
+//   ========================================================================== 
+// ==============STAMPANJE KALENDARA ZA DATU SOBU, MJESEC I GODINU, SA CIJENAMA I POPUSTIMA====
+//    ==========================================================================   
     
- //==============STAMPANJE KALENDARA ZA DATU SOBU, MJESEC I GODINU, SA CIJENAMA=================                    
        public function print_calendar(string $month, int $year, Room $room_for_check){
           global $calendar;
         
@@ -270,7 +284,10 @@ public function all_prices(string $month, int $year, Room $room_for_check){
     }
     
 
-
+//===============================================================
+//    ===================UPDATE CIJENA I POPUSTA===========================
+//==================================================================
+    
    public function prices_submit($room){
        global $calendar;
        
@@ -293,7 +310,7 @@ public function all_prices(string $month, int $year, Room $room_for_check){
        $update_query .= "'
        WHERE room_name = '" . $room->name . "'";
        $update_query .= " AND facility_name = '" . $room->facility_name . "'";
-       $update_query .= " AND owner = '" . $room->owner . "'";
+       $update_query .= " AND owner = '" . $room->get_owner() . "'";
        $update_query .= " AND year = '" . $calendar->active_year() . "'";
 //       echo $update_query . "<br>";
        
@@ -310,7 +327,8 @@ public function all_prices(string $month, int $year, Room $room_for_check){
 
 
 
-
+// pomocna test metoda
+    
 public function test2(){
     global $room;
     global $calendar;

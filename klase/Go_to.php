@@ -1,5 +1,21 @@
 <?php
 
+/*
+
+ZA PRELAZAK:
+to_admin_index
+to_login_page
+to_logout_page
+to_user_create_page
+to_profile_page
+
+PROVJERA NA KOJOJ STRANICI SE TRENUTNO NALAZI PREGLEDAC
+is_on_page
+
+current_adress : trenutna adresa pregleaca
+random_number : slucajan broj, korisno za novo ime slike
+
+*/
 
 
 class Go_to{
@@ -41,13 +57,6 @@ public static function to_profile_page(){
     
     
     
-  
-    //vraca mjesto headera
-public static function header_location(){
-   $path = SITE_ROOT;
-   $path .= "/admin/includes/header.php";
-   return $path;
-}
     
 
 //    ---PROVJERA NA KOJOJ STRANICI SE TRENUTNO NALAZI PREGLEDAC------
@@ -58,8 +67,14 @@ public static function is_on_page($name_of_page){
     return strpos($url, $name_of_page);
 }
 
+    
+//  ---------trenutna adresa------ (sa stack-a...)
+public static function current_adress(){
+   return $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
+}
 
+    
 //----SLUCAJAN BROJ----------
     //korisno za novo ime slike
     
@@ -74,14 +89,10 @@ public static function is_on_page($name_of_page){
 
 
 
-//  ---------trenutna adresa------ (sa stack-a...)
-public static function current_adress(){
-   return $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-}
 
 
 
+//============class end============
 }
 
 

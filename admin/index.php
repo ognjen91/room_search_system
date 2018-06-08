@@ -24,7 +24,7 @@
                             
                  <div class="facilities_listed">  
                       <?php
-                   foreach($facility->users_facilities() as $fac){ ?>
+                   foreach($facility->users_facilities($user) as $fac){ ?>
                             
                           
  <div class="facility_listed">                      

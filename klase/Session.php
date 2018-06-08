@@ -1,5 +1,12 @@
 <?php
 
+/*
+get_session_status - vraca status sesije
+set_user_session - podesava sesiju
+log_out - za odjavljivanje korisnika i unistavanje sesije
+
+*/
+
 class Session {
     public $username;
     public $password;
@@ -14,9 +21,10 @@ class Session {
         
     }
 
+    
     //settovanje sesije
-     public function set_user_session(){
-         global $user;
+    public function set_user_session(){
+    global $user;
          if (!GO_to::is_on_page("login") || !GO_to::is_on_page("login")){
              
          if ($this->get_session_status()){
@@ -32,8 +40,9 @@ class Session {
          }
     
 
-//  LOGOUT FUNKCIJA
     
+    
+//  LOGOUT FUNKCIJA
     public function log_out(){
         
         session_destroy();
@@ -44,6 +53,6 @@ class Session {
 
 
 
-
+//====class end====
 }
 ?>

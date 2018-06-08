@@ -8,7 +8,7 @@ $active_fac=$facility->facility_for_edit();
 
 <form method="POST" action="facility_submit.php?facility=<?php echo $active_fac->facility_name; ?>" enctype="multipart/form-data">
   Naziv sobe:<br>
-  <input type="text" name="name">
+  <input type="text" name="name" class='enter_room_name'>
   <br>
 Klima uredjaj:
 <select name="air_conditioner">

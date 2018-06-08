@@ -33,7 +33,7 @@
         <div class="adm_cal">
         
         <div class="calendar">
-            
+          
         <?php $prices->print_calendar($month, $year, $room); ?>    
             
             

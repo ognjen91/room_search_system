@@ -1,5 +1,12 @@
 <?php
 
+/*
+all_images : vraca listu imena slika sobe iz tabele room_images
+all_room_images_adm : sve slike, admin panel
+delete : brisanje 
+
+*/
+
 class Room_image extends Image {
    protected static $db_table = "room_images";   
     public $room_name; //ok
@@ -8,8 +15,12 @@ class Room_image extends Image {
     
     
     
+        
+    
     //vraca listu imena slika sobe iz tabele room_images
   public static function all_images($room, $facility, $owner){
+     
+      
      $images = array();  
       
      $condition = " facility_name='".$facility."' AND";
@@ -25,7 +36,8 @@ class Room_image extends Image {
       return $images;
   }
 
-
+    
+    //sve slike, admin panel
     public function all_room_images_adm(){
        $this->get_image_data();
 //       var_dump($this->room_name);

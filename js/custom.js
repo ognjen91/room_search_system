@@ -125,7 +125,39 @@ calendar_heights();
         
        
         
-
+//--------------PRIKAZ SOBE----------
+    
+    
+   $('body').on('click', 'div.fp_show_more', function() {
+       $room_id = $(this).parent().attr('id');
+        $.ajax({
+             url: 'includes/room_search/search_room_by_id.php',
+             type: 'POST',
+             data: {
+                 room_id : $room_id
+             },
+             success: function (room) {
+         
+                 
+            console.log(room);
+//            console.log(room.info.room_name)     
+                 
+                 
+                 
+                 
+                 
+                 
+//                
+             },
+             error: function (req) {
+                 console.log('Error: ' + req.status);
+             }
+         }); 
+       
+       
+       
+       
+   });
     
     
     

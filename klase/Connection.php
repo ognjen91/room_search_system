@@ -1,6 +1,6 @@
 <?php
 
-
+//definisanje konekcije
     
     
 class Connection {

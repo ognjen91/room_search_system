@@ -316,6 +316,11 @@
 .fp_basic_info {
   width: 25%; }
 
+.fp_show_more {
+  width: 15%;
+  border: 1px solid black;
+  background-color: green; }
+
 .fp_calendar {
   width: 49%;
   display: inline-block;
@@ -338,5 +343,11 @@
 .calendar_blanc_wrap {
   display: inline-block;
   border: 1px solid yellow; }
+
+.fp_show_room {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  border: 2px solid green; }
 
 /*# sourceMappingURL=customstyle.css.map */

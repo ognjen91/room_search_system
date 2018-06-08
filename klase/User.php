@@ -1,9 +1,26 @@
 <?php
 
 
+/*
+check_login_data i submit_login_form - za submitovanje login forme na stranici login.php
+create_user - glavna fja za kreiranje novog korisnika
+update_user - update podataka o korisniku
+login_from_session - prijava na stranicama koje nisu naznacene u samoj metodi. prima podatke iz sesije i preuzima podatke iz baze
+
+POMOCNE METODE:
+get_data_for_checking: uzima username i pass iz session-a i dodjeljuje propsima objekta
+select_all_users: pronalazenje svih korisnika u bazi
+user_exists : provjera da li korisnik postoji u bazi (za logovanje)
+username_exists : provjerava da li korisnicko ime vec postoji u bazi (za kreiranje novog naloga)
+
+GETTER METODE:
+za username, password, email
+
+*/
+
 class User extends Db_object{
     protected static $db_table = "users";
-   public $username;
+   protected $username;
     protected $password;
     protected $id;
     protected $email;
@@ -13,7 +30,7 @@ class User extends Db_object{
     protected static $db_table_fields = ['username', 'password', 'email'];
     
  
-//  ------------SUBMIT LOGIN FORME----------
+//  =============SUBMIT LOGIN FORME=============
     
   //provjerava da li su uneseni username i sifra ispravni
     //dio glavne login fje
@@ -48,7 +65,7 @@ class User extends Db_object{
      
 
     
-//    -----------KREIRANJE NOVOG KORISNIKA----------
+//    -=========KREIRANJE NOVOG KORISNIKA=========
 
     
     
@@ -92,7 +109,7 @@ class User extends Db_object{
     }
     
     
-    
+//    =====================UPDATE KORISNIKA=====================
     
     public function update_user(){
         $array_for_update = ['email' => $_POST['new_email'], 'password' => $_POST['new_password']];
@@ -150,9 +167,10 @@ class User extends Db_object{
 }
     
   
-//    -------------POMOCNE METODE----------
+//    ===============POMOCNE METODE===============
    
-        private function get_data_for_checking(){
+    //uzimanje podataka iz sessiona
+    private function get_data_for_checking(){
      global $connection;
      $username = $_POST['username'];
      $password = $_POST['password'];
@@ -163,27 +181,7 @@ class User extends Db_object{
  
  } 
     
-    
-    
-    
-    //  --getter fje za propse objekta-------------  
-
- public function username(){
-     return $this->username;
- }
-    
-    
- public function email(){
-     return $this->email;
- }
-
-public function password(){
-     return $this->password;
- }
-    
-    
-
-// pronalazenje svih usera u bazi 
+   // pronalazenje svih usera u bazi 
   public function select_all_users(){
         
         $query = "SELECT * FROM " . self::$db_table ;
@@ -209,10 +207,31 @@ public function password(){
          
          $usersArray = static::get_queries_object_array($query); 
          return !empty($usersArray);
-    }
+    } 
+    
+    
+//    ==============GETTER METODE===================
+    //  --getter fje za propse objekta-------------  
+
+ public function username(){
+     return $this->username;
+ }
+    
+    
+ public function email(){
+     return $this->email;
+ }
+
+public function password(){
+     return $this->password;
+ }
     
     
 
+
+    
+    
+//====class end====
 }
 
 

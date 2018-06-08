@@ -27,7 +27,7 @@
 
     <h1>Soba: <?php echo $room->name; ?></h1>
     <h2>Objekat: <?php echo $room->facility_name; ?></h2>
-    <h3>Vlasnik: <?php echo $room->owner; ?></h3>
+    <h3>Vlasnik: <?php echo $room->get_owner(); ?></h3>
     
     
     
@@ -37,12 +37,17 @@
         
     <h5>Mjesec: <?php echo $calendar->active_month(); ?></h5>
     <h5>Godina: <?php echo $calendar->active_year(); ?></h5>
-    
-            <?php if ($_SESSION['calendar_updated'] && $_SESSION['prices_updated'] ){
+    <?php 
+//        var_dump($_SESSION); 
+        ?>
+            <?php if (isset($_SESSION['calendar_updated']) && isset($_SESSION['prices_updated'])){
+    if ($_SESSION['calendar_updated'] && $_SESSION['prices_updated'] ){
     echo "<h1>Uspjesno. Mozete napraviti nove izmjene.</h1>";
     //resetujem parametre
     $_SESSION['calendar_updated'] = false;
     $_SESSION['prices_updated'] = false;
+}
+    
 } ?>
     
     

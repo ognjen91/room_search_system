@@ -1,7 +1,24 @@
 <?php
 
-//$sql = "INSERT INTO " . static::$db_table ."(" .  implode(",", array_keys($properties))   . ")";
-//        $sql .= "VALUES ('" .implode("','", array_values($properties)) ."')";
+/*
+
+get_data_for_create - podaci za kreiranje nove sobe
+make_facility_and_add_data - glavna create fja objekta
+get_data_for_edit_ajax - podaci za ajax edit sobe
+facility_edit_ajax - ajax edit sobe
+set_facility_profile_image - ubac profilne slike MOZE SE ISKORISTI I ZA UPDATE!!!
+
+DRUGE METODE:
+users_facilities : vraca array sa objektima facility cijim je vlasnik aktivn user  
+facility_for_edit : uzima vrijednost facility_namea iz get-a i postavlja vlasnika
+vraca objekat objekta koji se sada aktivan
+
+GLAVNA METODA ZA PODATKE:
+get_facility_data
+ 
+GETTER METODE 
+za vlasnika...
+*/
 
 
 class Facility extends Db_object {
@@ -104,7 +121,9 @@ class Facility extends Db_object {
     
  
     
-//  ------------------------PROFILNA-------------------
+//  ===============PROFILNA===============
+    
+    
  //POSTAVLJANJE PROFILNE - ZAPRAVO UBAC PROFIL IMG jer se ovo vrsi nakon kreiranja objekta u bazi      
 //$imageNameString - ime slike iz posta
 //$db_name - ime tabele u bazi
@@ -120,22 +139,13 @@ class Facility extends Db_object {
 
     
     
-    
-
-    
-    
-    
-    
-
-
-
 //====================DRUGE FJE==================
     
     
 //    --------KORISNIKOVI OBJKETI----------
    //vraca array sa objektima facility cijim je vlasnik aktivn user  
-public function users_facilities(){
-    global $user;
+public function users_facilities(User $user){
+    
     
     $facilities = self::find_all("owner='".$user->username()."'");
     
@@ -150,21 +160,18 @@ public function users_facilities(){
  public function facility_for_edit() {
      global $user;      
      $this->get_facility_data();
-     
-      $facility=  $this->active_facility;
-      
-      $owner = $this->owner = $user->username();
-      
- $active_facility = $this->find_specific("facility_name='". $facility ."' AND owner='" . $owner . "'");
+     $facility=  $this->active_facility;
+     $owner = $this->owner = $user->username();
+     $active_facility = $this->find_specific("facility_name='". $facility ."' AND owner='" . $owner . "'");
        return  $active_facility;   
-//      return  var_dump($_SESSION);   
+  
         
     }
 
 
 
 
-//----------GLAVNA METODA ZA PODATKE-------
+//=========GLAVNA METODA ZA PODATKE=========
 
 
 
@@ -182,9 +189,13 @@ public function get_facility_data(){
    
 }
 
+//--------------------------GETTER METODE-------------
+    
+    public function get_owner(){
+        return $this->owner;
+    }
 
-
-
+    
 
 
 }

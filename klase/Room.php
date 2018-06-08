@@ -1,12 +1,37 @@
 <?php
 
+/*
+ideja kod kreiranja nove sobe je da se ubace svi podaci sem profile_picture, a za nju imam posebnu metodu, pa je prakticno updatujem
+
+make_room_and_add_data : kreiranje nove sobe
+set_room_profile_image : postavljanje (=update) profilne slike -- MOZE SE ISKORISTITI ZA UPDATE PROFILNE
+update_room : update podataka sobe
+delete_room : brisanje sobe
+
+DRUGE i POMOCNE METODE:
+all_facility_rooms_adm - izlistavanje soba za admin page
+room_for_edit : vraca aktivnu sobu za edit
+profile_image_name - vraca ime profilne slike sobe BEZ EKSTENZIJE
+rooms_place : mjesto u kom se nalazi soba
+get_room_by_id : pretraga sobe po id-u
+get_all_rooms : vraca array sa svim sobama u bazi
+
+METODE ZA PODATKE SOBE:
+get_room_data
+get_room_data_spec - za spec slucajeve, npr kad treba uzeti van klase
+
+GETTER METODE:
+get_owner, get_facility, get_room_name, get_room_id, get_all_room_data
+
+*/
 
 class Room extends Db_object{
  protected static $db_table = "rooms";   
-    
+ 
+ protected $id;
  public $name;
  public $facility_name;
- public $owner;
+ protected $owner;
  public $profile_image;
  public $description_srb;
  public $description_eng;
@@ -18,8 +43,8 @@ class Room extends Db_object{
  public $other_amenities_srb;
  public $other_amenities_eng;
  public $no_of_beds;
- public $place;
-public static $db_table_fields = ['name', 'owner', 'facility_name', 'profile_image', 'description_srb', 'description_eng', 'air_conditioner', 'kitchen', 'bathroom', 'tv', 'terace', 'other_amenities_srb', 'other_amenities_eng', 'no_of_beds']; 
+ public $place; //nema potrebe za protected
+public static $db_table_fields = ['id', 'name', 'owner', 'facility_name', 'profile_image', 'description_srb', 'description_eng', 'air_conditioner', 'kitchen', 'bathroom', 'tv', 'terace', 'other_amenities_srb', 'other_amenities_eng', 'no_of_beds']; 
     
 public function __construct(){
     
@@ -32,7 +57,13 @@ public function __construct(){
       public function make_room_and_add_data(){
       $this->get_room_data();
       $db_props = $this->object_props(); //ubac podataka iz objekta u array db_table_fields
-
+      
+      $this->owner = $this->escape_string($this->owner);
+      $this->facility_name = $this->escape_string($this->facility_name);
+          
+     $this->name = $this->escape_string($this->name);
+          
+          
         $does_exist = self::if_already_exists(self::$db_table, "owner='".$this->owner."' AND facility_name='" . $this->facility_name . "' AND name='" . $this->name . "'");
 //        return var_dump($does_exist);
         if (!$does_exist){
@@ -63,21 +94,32 @@ public function __construct(){
 
 public function update_room(){
     
-    //necu mijenjati profile image pa je izbacujem iz arraya za update
+
     $this->get_room_data();
-    if (($key = array_search("profile_image", self::$db_table_fields)) !== false) {
+//    //necu mijenjati id sigurno pa ga izbacujem iz arraya za update
+   if (($key = array_search("id", self::$db_table_fields)) !== false) {
     unset(self::$db_table_fields[$key]);
-}
-    
+    }
+
+//   ideja da iz sessiona uzmem stare podatke i da izbacim iz db_table_fields one koji su ista...jer sql ne updatuje polja koja nisu promjenjena i izbacuje gresku. tako eliminisem i polja name, fac_name, owner, profile_picture ali i sve sto je isto
+    $old_props = $_SESSION['active_room_old'];
+    unset($old_props['id']); //da ne bi bilo greske pri poredjenju
     $props_for_update = $this->object_props();
-//    var_dump($props_for_update);
-    foreach($props_for_update as $key=>$value){
+    
+    foreach($old_props as $key=>$value){
+        if (isset($old_props[$key])){
+        if ($old_props[$key] == $props_for_update[$key]) unset($props_for_update[$key]);
+        }
+    }
+   
+   foreach($props_for_update as $key=>$value){
     $query = "UPDATE " . self::$db_table;
     $query .= " SET ". $key . "='" . $value . "' WHERE ";
     $query .= " name='" . $this->name . "' AND";
     $query .= " facility_name='" . $this->facility_name . "' AND";
     $query .= " owner='" . $this->owner . "'";
-    
+//    var_dump($query);
+        
     $result = $this->update_query_to_db($query); 
     if (!$result){
         die ("Greska prilikom update-a sobe.");
@@ -145,6 +187,7 @@ public function delete_room(){
 
 //    =============DRUGE I POMOCNE METODE================
 
+    //SVI OBJEKTI ADMINA
     //izlistavanje svih soba aktivnog korisnika
    public function all_facility_rooms_adm(){
        $this->get_room_data();
@@ -156,6 +199,7 @@ public function delete_room(){
        return $rooms;
    }
 
+    //AKTIVNA SOBA ZA EDIT
 //vraca aktivnu sobu
  public function room_for_edit() {
     $this->get_room_data();
@@ -174,12 +218,12 @@ public function delete_room(){
   private function profile_image_name(){
       global $image; 
       
-     $condition = " facility_name='".$this->facility_name."' AND";
-     $condition .= " owner='". $this->owner . "' AND";
-     $condition .= " name='".$this->name."'";    
+     $condition = " facility_name='".$this->get_facility()."' AND";
+     $condition .= " owner='". $this->get_owner() . "' AND";
+     $condition .= " name='".$this->get_room_name()."'";    
       
      $room = $this->find_specific($condition);
-     $room_name = $room->profile_image;
+     $room_name = $this->profile_image;
       
       $name_no_extension = $image->name_no_extension($room_name);
 
@@ -187,9 +231,46 @@ public function delete_room(){
       return $name_no_extension;
   }
     
-     
+//    MJESTO SOBE
+    //spaja se sa tabelom facilities i nalazi mjesto u kom se nalazi soba
+public function rooms_place(Room $room_selected){
+        $facility_name = $room_selected->get_facility();
+        $owner = $room_selected->get_owner();
+        
+        $query = <<<EOT
+SELECT facilities.place
+FROM facilities
+INNER JOIN rooms ON 
+facilities.owner = rooms.owner
+AND
+facilities.facility_name = rooms.facility_name;
+EOT;
+        $result = $this->find_specific_full_query($query);
+        return $result->place;
+    }
     
-//=======GLAVNA METODA ZA PODATKE SOBE============
+    
+    //PRETRAGA SOBE PO ID-u
+     public static function get_room_by_id(int $id){
+        $safe_id = self::escape_string($id);
+        return self::find_specific("id='$safe_id'");
+        
+        
+    }  
+    
+    
+    //SVE SOBE U BAZI
+    public function get_all_rooms(){
+        $all_rooms = self::find_all_no_cond();
+        foreach($all_rooms as $room){
+        }
+       return $all_rooms;
+    }
+     
+// =======================================
+//=======METODE ZA PODATKE SOBE============
+//=======================================
+    
 //vazna glavna fja koja uzima potrebne podatke iz posta fja koja uzima podatke 
     
         protected function get_room_data(){
@@ -213,7 +294,8 @@ public function delete_room(){
             $this->facility_name = $_GET['facility'];
             $this->owner = $user->username();
             $this->array_vars_to_obj_props($_POST, $this);
-
+            
+            
 //            var_dump($user->username());
 //            var_dump($this);
         }
@@ -236,7 +318,8 @@ public function delete_room(){
         
     }
 
-
+    
+           //druga za podatke sobe
      public function get_room_data_spec(){
           if (Go_to::is_on_page("room_calendars")){
             global $user;
@@ -267,17 +350,46 @@ public function delete_room(){
     
         
 //    ======GETTER METODE==========
-    public function get_all_rooms(){
-        $all_rooms = self::find_all_no_cond();
-        foreach($all_rooms as $room){
-            
-            
-        }
-        
-        return $all_rooms;
+    
+    
+   public function get_owner(){
+        return $this->owner;
     }
     
-  
+    public function get_facility(){
+        return $this->facility_name;
+    }
+    
+     public function get_room_name(){
+        return $this->name;
+    }
+    
+     public function get_room_id(){
+        return $this->id;
+    }
+   
+    //zgodno je vratiti array jer saljem kao json
+    public function get_all_room_data(){
+        $data = array ();
+        $data['room_name'] = $this->get_room_name();
+        $data['facitilty_name'] = $this->get_facility();
+        $data['owner'] = $this->get_owner();
+        $data['profile_image'] = $this->get_owner();
+        $data['description_srb'] = $this->description_srb;
+        $data['description_eng'] = $this->description_eng;
+        $data['air_conditioner'] = $this->air_conditioner;
+        $data['kitchen'] = $this->kitchen;
+        $data['bathroom'] = $this->bathroom;
+        $data['tv'] = $this->tv;
+        $data['terace'] = $this->terace;
+        $data['other_amenities_srb'] = $this->other_amenities_srb;
+        $data['other_amenities_eng'] = $this->other_amenities_eng;
+        $data['no_of_beds'] = $this->no_of_beds;
+        
+        
+        return $data;
+    }
+    
     
 //    ==class end==
 }

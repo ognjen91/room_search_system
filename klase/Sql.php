@@ -1,6 +1,13 @@
 <?php
 
+/*
+query_to_db : vraca set rezultata iz baze
+create : ubacuje u naznacenu tabelu vrijednosti array-a (key je row, value je sadrzaj rowa)
+update_query_to_db : update query, vraca affected rows
+escape_string : escape stringa za ubac u bazu
+escape_array : escape vrijednosti arraya za ubac u bazu
 
+*/
 class Sql {
 
     //sljedeci edit counter je uveden zbog slucaja update-a kada updatujem vise podataka (slika) kroz petlju i tada affected rows vraca 0
@@ -8,9 +15,9 @@ class Sql {
     
     
     
-//    ---------OSNOVNI QUERY METHOD-----------
+//    =================OSNOVNI QUERY METHOD=================
     //vraca set rezultata iz baze
-    protected function query_to_db($query){
+    protected function query_to_db(string $query){
         global $connection;
         try {
              $result_set = mysqli_query($connection->connection, $query);
@@ -27,20 +34,21 @@ class Sql {
     
     
     
-//    -----CREATE QUERY-----------
+//    =================CREATE QUERY=================
     //ulazni podaci su ime tabele i array-a iz kojeg ubacujemo podatke
-        public function create($table, $array_for_insert){
-       $query = "INSERT INTO " . static::$db_table . " (" . implode(", ", array_keys($array_for_insert)) . ") ";
+        public function create(string $table, array $array_for_insert){
+            
+       $query = "INSERT INTO " . $table . " (" . implode(", ", array_keys($array_for_insert)) . ") ";
        $query .= "VALUES ('". implode("','", array_values($array_for_insert)) ."')";
 //        var_dump($query);
         try {
             $result = $this->query_to_db($query);
-            if (!$result){
+               if (!$result){
                 throw new Exception ("Problem sa kreiranjem novog unosa u bazu.");
-            }
-        } catch (Exception $e){
+                }
+            } catch (Exception $e){
             die ("Greska! " . $e->getMessage());
-        }
+            }
        
         return $result? true : false;
 //        return $query;
@@ -55,7 +63,7 @@ class Sql {
 //    -----------UPDATE & DELETE QUERY---------
     //za update i delete jer provjerava affected rows
     //vraca affected rows (=number)
-      protected function update_query_to_db($query){
+      protected function update_query_to_db(string $query){
         global $connection;
         try {
              $result_set = mysqli_query($connection->connection, $query);
@@ -77,7 +85,7 @@ class Sql {
     
     
     
-//    -----ESCAPE-OVANJE PODATAKA-----------
+//    ===========ESCAPE-OVANJE PODATAKA===========
     
     //za escapeovanje stringa
     public function escape_string($string){
@@ -101,16 +109,6 @@ class Sql {
     }
     
     
- 
-    
-    
-    
-    
-        
-    
-    
-
-    
-    
+ //====class end====  
 }
 ?>

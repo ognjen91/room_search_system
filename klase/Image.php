@@ -1,6 +1,26 @@
 <?php
 
+/*
 
+add_new : ubac nove slike
+update_image
+delete_image_from_folers -brisanje iz foldera
+delete_image_from_db - brisanje iz baze
+delete_image - glavna metoda za brisanje
+
+DRUGE METODE:
+array_fields_in_db : provjerava da li se clanovi $inputArray-a nalaze u arrayu $db_table_fields i ako da, u $this->new_image (nova slika koju ubacujem) ubacuje.
+name_no_extension : vrac ime bez ekstenzije
+
+PRIKAZI SLIKA:
+all_facility_images_adm : prikaz slika u admin panelu
+find_all_images($condition) : sve slike sa random uslovom
+
+METODE ZA PODATKE SLIKA:
+get_image_data
+get_image_data_publ
+
+*/
 
 class Image extends Db_object {
     protected static $db_table = "images";
@@ -159,9 +179,9 @@ class Image extends Db_object {
  
     
     
-    
+//    ====================================================
 //    =============UPDATE IMAGE=========================
-    
+//    ====================================================
 //$imageNameString - ime slike iz posta
 //$db_table - ime tabele u bazi
 //$db_image_field - ime rowa iz baze sa imenom slike 
@@ -203,9 +223,9 @@ public function update_image($imageNameString, $db_table, $db_image_field, $cond
 }
     
     
-
+=======================================================
 //    =======================DELETE SLIKA==================
-     
+ =======================================================    
 //------------BRISANJE IZ FOLDERA-----------
 //koristim ugradjenu klasu DirectoryIterator
     
@@ -269,11 +289,13 @@ public function update_image($imageNameString, $db_table, $db_image_field, $cond
   
     
     
+    
+    
+    
+    
 //    ============POMOCNE I DRUGE METODE=================
     
-    
-    
-  //pomocna fja koja provjerava da li se clanovi $inputArray-a (Npr $_POST['nesto'], $_FILES['nesto]) nalaze u arrayu $db_table_fields i ako da, u $this->new_image (nova slika koju ubacujem) ubacuje.
+//pomocna fja koja provjerava da li se clanovi $inputArray-a (Npr $_POST['nesto'], $_FILES['nesto]) nalaze u arrayu $db_table_fields i ako da, u $this->new_image (nova slika koju ubacujem) ubacuje.
     //npr provjerava da li se var iz POST-a nalaze u db_table_fields i ako se nalaze, dodjeljuje vrijednost u $this-new_image arrayu koji i ubacujem u bazu
 
     protected function array_fields_in_db($inputArray, $db_table_fields, $counter){
@@ -302,6 +324,8 @@ public function update_image($imageNameString, $db_table, $db_image_field, $cond
        return $name_no_extension;
    } 
     
+    
+    
 //    ==================PRIKAZI SLIKA=====================
     
 //    ------------prikaz slika u admin panelu------------
@@ -315,6 +339,8 @@ public function update_image($imageNameString, $db_table, $db_image_field, $cond
        return $images;
    }
     
+
+        
    
 //  -------sve slike sa random uslovom---------------
     public function find_all_images($condition){
@@ -324,8 +350,10 @@ public function update_image($imageNameString, $db_table, $db_image_field, $cond
 
     
     
-    
+//    =============================================
 //    ============GLAVNA METODA ZA PODATKE SLIKA============
+//  =============================================
+
          protected function get_image_data(){
         global $user;
         
@@ -353,16 +381,8 @@ public function update_image($imageNameString, $db_table, $db_image_field, $cond
     
     
     
-    
+    //    ==class end==
          }
     
-        
-    
-
-
-
-
-
-
-
+  
 ?>

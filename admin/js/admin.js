@@ -146,8 +146,9 @@ $( document ).ready(function() {
     
     
     //pravilno popunjavanje select polja
-    
+//    alert('ok')
  $(".er_active_value").each(function() {
+   
    $active_value = $(this).attr('value');
    $other_value = 1;     
    $active_value == 1? $other_value=0 : null;
@@ -271,7 +272,13 @@ $( document ).ready(function() {
   $(this).val(cleared);
 }); 
      
+          $('body').on('keyup', 'input.enter_room_name', function() {
+        var cleared = $(this).val().replace("'", '').replace('"', '');
         
+  // vracam vrijednost bez slova
+  $(this).val(cleared);
+}); 
+     
         
  
     
